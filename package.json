@@ -1,0 +1,48 @@
+{
+  "name": "project-using-browserify-and-postcss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "clean": "rimraf dist && mkdirp dist",
+    "build": "npm-run-all clean --parallel build:*",
+    "build:html": "htmlhint src/*.html && cpx src/*.html dist/",
+    "build:js": "stylelint src/styles/*.css && browserify src/scripts/main.js -o dist/bundle.js",
+    "build:css": "stylelint src/styles/*.css && postcss --config postcss.config.json",
+    "watch": "npm-run-all --parallel watch:* run-http-server",
+    "watch:html": "chokidar 'src/*.html' -c 'htmlhint src/*.html | cpx src/*.html dist'",
+    "watch:js": "watchify src/scripts/main.js -o dist/bundle.js",
+    "watch:css": "chokidar 'src/styles/**/*.css' -c 'stylelint dist/bundle.css | postcss --config postcss.config.json'",
+    "run-http-server": "http-server dist"
+  },
+  "keywords": [],
+  "author": "yhorie <yuk.horie@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^6.4.1",
+    "browserify": "^13.1.0",
+    "chokidar-cli": "^1.2.0",
+    "cpx": "^1.5.0",
+    "eslint": "^3.6.0",
+    "htmlhint": "^0.9.13",
+    "http-server": "^0.9.0",
+    "jquery": "^3.1.1",
+    "mkdirp": "^0.5.1",
+    "npm-run-all": "^3.1.0",
+    "postcss-cli": "^2.6.0",
+    "postcss-custom-properties": "^5.0.1",
+    "postcss-import": "^8.1.2",
+    "postcss-nested": "^1.0.0",
+    "postcss-reporter": "^1.4.1",
+    "rimraf": "^2.5.4",
+    "stylelint": "^7.3.1",
+    "stylelint-config-standard": "^13.0.2",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "normalize.css": "^4.2.0"
+  }
+}
