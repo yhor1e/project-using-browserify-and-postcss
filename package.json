@@ -7,16 +7,21 @@
     "test": "test"
   },
   "scripts": {
-    "clean": "rimraf dist && mkdirp dist",
-    "build": "npm-run-all clean --parallel build:*",
-    "build:html": "htmlhint src/*.html && cpx src/*.html dist/",
-    "build:js": "stylelint src/styles/*.css && browserify src/scripts/main.js -o dist/bundle.js",
-    "build:css": "stylelint src/styles/*.css && postcss --config postcss.config.json",
-    "watch": "npm-run-all --parallel watch:* run-http-server",
-    "watch:html": "chokidar 'src/*.html' -c 'htmlhint src/*.html | cpx src/*.html dist'",
-    "watch:js": "watchify src/scripts/main.js -o dist/bundle.js",
-    "watch:css": "chokidar 'src/styles/**/*.css' -c 'stylelint dist/bundle.css | postcss --config postcss.config.json'",
-    "run-http-server": "http-server dist"
+    "clean": "rimraf dist && mkdirp dist ",
+    "build": "npm-run-all clean -p build:*",
+    "build:html": "cpx src/*.html dist/",
+    "build:images": "cpx src/images/*.{png,jpg} dist/images/",
+    "build:scripts": "browserify src/scripts/main.js -o dist/bundle.js",
+    "build:styles": "postcss -c postcss.config.json",
+    "watch": "npm-run-all -p watch:* http-server",
+    "watch:html": "chokidar 'src/*.html' -c 'cpx src/*.html dist'",
+    "watch:scripts": "watchify src/scripts/main.js -v -o dist/bundle.js",
+    "watch:styles": "chokidar 'src/styles/**/*.css' -c 'postcss -c postcss.config.json -m'",
+    "http-server": "http-server dist",
+    "lint": "npm-run-all lint:*",
+    "lint:html": "htmlhint src/*.html",
+    "lint:scripts": "eslint -c .eslintrc src/scripts/**/*.js ",
+    "lint:styles": "stylelint src/styles/*.css"
   },
   "keywords": [],
   "author": "yhorie <yuk.horie@gmail.com>",
@@ -24,6 +29,7 @@
   "devDependencies": {
     "autoprefixer": "^6.4.1",
     "browserify": "^13.1.0",
+    "browserify-shim": "^3.8.12",
     "chokidar-cli": "^1.2.0",
     "cpx": "^1.5.0",
     "eslint": "^3.6.0",
@@ -40,9 +46,23 @@
     "rimraf": "^2.5.4",
     "stylelint": "^7.3.1",
     "stylelint-config-standard": "^13.0.2",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "waypoints": "^4.0.1"
   },
   "dependencies": {
     "normalize.css": "^4.2.0"
+  },
+  "browser": {
+    "waypoints": "./node_modules/waypoints/lib/noframework.waypoints.js"
+  },
+  "browserify-shim": {
+    "waypoints": {
+      "exports": "waypoints"
+    }
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
   }
 }

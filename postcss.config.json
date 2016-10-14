@@ -1,9 +1,9 @@
 {
   "use": [
-    "autoprefixer",
+    "postcss-import",
     "postcss-custom-properties",
     "postcss-nested",
-    "postcss-import",
+    "autoprefixer",
     "postcss-reporter"
   ],
   "input": "src/styles/app.css",
